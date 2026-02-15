@@ -24,7 +24,7 @@
     "vite": "^6.0.0"
   },
   "dependencies": {
-    "@claudiv/core": "workspace:*",
+    "@claudiv/core": "^0.1.0",
     "chokidar": "^5.0.0"
   },
   "devDependencies": {
@@ -44,11 +44,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/claudiv-ai/claudiv.git",
-    "directory": "packages/vite-sdk"
+    "url": "git+https://github.com/claudiv-ai/vite-sdk.git"
   },
   "bugs": {
-    "url": "https://github.com/claudiv-ai/claudiv/issues"
+    "url": "https://github.com/claudiv-ai/vite-sdk/issues"
   },
   "homepage": "https://claudiv.org",
   "publishConfig": {

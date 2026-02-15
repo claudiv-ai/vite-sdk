@@ -12,4 +12,3 @@ export type { ClaudivPluginOptions } from './types.js';
 
 // Utilities (for advanced usage)
 export { ClaudivViteWatcher } from './watcher.js';
-export { DevServer } from './dev-server.js';

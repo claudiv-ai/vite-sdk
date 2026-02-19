@@ -1,6 +1,6 @@
 {
   "name": "@claudiv/vite-sdk",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Vite framework SDK for Claudiv — declarative AI interaction platform",
   "main": "dist/index.js",
   "type": "module",

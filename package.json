@@ -1,7 +1,7 @@
 {
   "name": "@claudiv/vite-sdk",
-  "version": "0.1.0",
-  "description": "Vite plugin for Claudiv integration - CDML generation with HMR",
+  "version": "0.2.0",
+  "description": "Vite framework SDK for Claudiv — declarative AI interaction platform",
   "main": "dist/index.js",
   "type": "module",
   "exports": {
@@ -10,35 +10,42 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "bin": {
+    "claudiv-vite-init": "./bin/init.js",
+    "claudiv-vite-dev": "./bin/dev.js",
+    "claudiv-vite-gen": "./bin/gen.js",
+    "claudiv-vite-mode": "./bin/mode.js"
+  },
   "files": [
     "dist/**/*",
+    "bin/**/*",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
+    "postinstall": "node ./bin/postinstall.js",
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rm -rf dist"
   },
-  "peerDependencies": {
-    "vite": "^6.0.0"
-  },
   "dependencies": {
-    "@claudiv/core": "^0.1.0",
-    "chokidar": "^5.0.0"
+    "@claudiv/core": "^0.3.0",
+    "chokidar": "^5.0.0",
+    "prompts": "^2.4.2"
   },
   "devDependencies": {
-    "vite": "^6.0.0",
     "typescript": "^5.0.0",
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "@types/prompts": "^2.4.9"
   },
   "keywords": [
     "claudiv",
     "vite",
-    "plugin",
+    "sdk",
     "cdml",
     "code-generation",
-    "hmr"
+    "declarative",
+    "ai"
   ],
   "author": "Amir Guterman",
   "license": "MIT",

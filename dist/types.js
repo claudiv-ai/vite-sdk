@@ -3,5 +3,5 @@
  *
  * This file is kept minimal; SDK-level types live in @claudiv/core/sdk-types.
  */
-
-export type { ClaudivSDK, FrameworkDetector, InitResult, DevOptions, GenOptions } from '@claudiv/core';
+export {};
+//# sourceMappingURL=types.js.map

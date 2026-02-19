@@ -1,59 +1,35 @@
 /**
- * Vite plugin for Claudiv integration
+ * Vite SDK — implements ClaudivSDK for Vite-based projects.
  */
 
-import type { Plugin } from 'vite';
-import { ClaudivViteWatcher } from './watcher.js';
-import type { ClaudivPluginOptions } from './types.js';
+import type { ClaudivSDK, FrameworkDetector, InitResult, DevOptions, GenOptions } from '@claudiv/core';
+import { ViteDetector } from './detector.js';
+import { initViteProject } from './init.js';
+import { runDev } from './dev-runner.js';
+import { runGen } from './gen-runner.js';
 
-/**
- * Claudiv Vite plugin
- *
- * Integrates Claudiv generation with Vite's dev server and build process.
- * Watches .cdml files and regenerates code with HMR support.
- */
-export function claudiv(options: ClaudivPluginOptions = {}): Plugin {
-  let watcher: ClaudivViteWatcher;
+export class ViteSdk implements ClaudivSDK {
+  name = 'vite';
+  frameworkDetector: FrameworkDetector = new ViteDetector();
 
-  const config = {
-    specFile: options.specFile || 'claudiv/app.cdml',
-    outputDir: options.outputDir || 'src/generated',
-    mode: options.mode || 'cli',
-    target: options.target || 'html',
-    watch: options.watch !== false, // Default to true
-  };
+  async init(projectRoot: string): Promise<InitResult> {
+    return initViteProject(projectRoot, this.frameworkDetector);
+  }
 
-  return {
-    name: 'claudiv',
+  async dev(projectRoot: string, opts: DevOptions): Promise<void> {
+    return runDev(projectRoot, opts);
+  }
 
-    async configureServer(server) {
-      if (!config.watch) return;
+  async gen(projectRoot: string, opts: GenOptions): Promise<void> {
+    return runGen(projectRoot, opts);
+  }
 
-      // Initialize watcher for .cdml files
-      watcher = new ClaudivViteWatcher(config);
-      watcher.start();
-
-      // Handle .cdml file changes
-      watcher.on('change', async (cdmlFile) => {
-        server.ws.send({
-          type: 'full-reload',
-          path: '*',
-        });
-      });
-    },
-
-    async buildStart() {
-      // Generate all code before build
-      // TODO: Implement build-time generation
-    },
-
-    async closeBundle() {
-      if (watcher) {
-        watcher.stop();
-      }
-    },
-  };
+  getScripts(): Record<string, string> {
+    return {
+      'claudiv:init': 'claudiv-vite-init',
+      'claudiv:dev': 'claudiv-vite-dev',
+      'claudiv:gen': 'claudiv-vite-gen',
+      'claudiv:mode': 'claudiv-vite-mode',
+    };
+  }
 }
-
-// Export alias for convenience
-export const claudivPlugin = claudiv;

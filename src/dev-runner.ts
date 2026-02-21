@@ -21,6 +21,8 @@ import {
   questionsToFacts,
   serializeContextManifest,
   parseSpecFile,
+  parseResponse,
+  commitFiles,
 } from '@claudiv/core';
 import type { DevOptions, ContextManifest, ProjectRegistry } from '@claudiv/core';
 import { CdmlCache } from './cache.js';
@@ -110,7 +112,19 @@ export async function runDev(projectRoot: string, opts: DevOptions): Promise<voi
         const result = await executeClaudeHeadless(assembled, { mode: opts.mode || 'cli', apiKey: opts.apiKey });
 
         if (result.success) {
-          console.log(`[claudiv:dev] Generated (${result.durationMs}ms)`);
+          const blocks = parseResponse(result.response);
+          if (blocks.length > 0) {
+            const commit = await commitFiles(blocks, projectRoot);
+            for (const f of commit.written) {
+              console.log(`[claudiv:dev] Wrote: ${f}`);
+            }
+            if (commit.error) {
+              console.error(`[claudiv:dev] Commit failed (rolled back): ${commit.error}`);
+            }
+          } else {
+            console.log(`[claudiv:dev] Generated (${result.durationMs}ms) — no file blocks detected`);
+            process.stdout.write(result.response);
+          }
         } else {
           console.error(`[claudiv:dev] Failed: ${result.error}`);
         }

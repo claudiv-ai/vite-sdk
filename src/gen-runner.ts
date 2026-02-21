@@ -13,6 +13,8 @@ import {
   executeClaudeHeadless,
   loadProject,
   parseSpecFile,
+  parseResponse,
+  commitFiles,
 } from '@claudiv/core';
 import type { GenOptions, ContextManifest, ProjectRegistry } from '@claudiv/core';
 import { CdmlCache } from './cache.js';
@@ -75,8 +77,19 @@ export async function runGen(projectRoot: string, opts: GenOptions): Promise<voi
       const result = await executeClaudeHeadless(assembled, { mode: opts.mode || 'cli', apiKey: opts.apiKey });
 
       if (result.success) {
-        console.log(`[claudiv:gen] Generated (${result.durationMs}ms)`);
-        process.stdout.write(result.response);
+        const blocks = parseResponse(result.response);
+        if (blocks.length > 0) {
+          const commit = await commitFiles(blocks, projectRoot);
+          for (const f of commit.written) {
+            console.log(`[claudiv:gen] Wrote: ${f}`);
+          }
+          if (commit.error) {
+            console.error(`[claudiv:gen] Commit failed (rolled back): ${commit.error}`);
+          }
+        } else {
+          console.log(`[claudiv:gen] Generated (${result.durationMs}ms) — no file blocks detected`);
+          process.stdout.write(result.response);
+        }
       } else {
         console.error(`[claudiv:gen] Failed: ${result.error}`);
         process.exit(1);

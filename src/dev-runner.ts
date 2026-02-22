@@ -109,7 +109,7 @@ export async function runDev(projectRoot: string, opts: DevOptions): Promise<voi
         if (!contextManifest) continue;
 
         const assembled = await assembleContext(change, change.path, contextManifest, registry, projectRoot);
-        const result = await executeClaudeHeadless(assembled, { mode: opts.mode || 'cli', apiKey: opts.apiKey });
+        const result = await executeClaudeHeadless(assembled, { mode: opts.mode || 'sdk', apiKey: opts.apiKey });
 
         if (result.success) {
           const blocks = parseResponse(result.response);

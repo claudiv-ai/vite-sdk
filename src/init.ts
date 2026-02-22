@@ -63,7 +63,7 @@ export async function initViteProject(
   // Write default config
   const configPath = join(claudivDir, 'config.json');
   if (!existsSync(configPath)) {
-    await writeFile(configPath, JSON.stringify({ mode: 'cli' }, null, 2), 'utf-8');
+    await writeFile(configPath, JSON.stringify({ mode: 'sdk' }, null, 2), 'utf-8');
     filesCreated.push('.claudiv/config.json');
   }
 

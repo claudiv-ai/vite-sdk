@@ -74,7 +74,7 @@ export async function runGen(projectRoot: string, opts: GenOptions): Promise<voi
         continue;
       }
 
-      const result = await executeClaudeHeadless(assembled, { mode: opts.mode || 'cli', apiKey: opts.apiKey });
+      const result = await executeClaudeHeadless(assembled, { mode: opts.mode || 'sdk', apiKey: opts.apiKey });
 
       if (result.success) {
         const blocks = parseResponse(result.response);

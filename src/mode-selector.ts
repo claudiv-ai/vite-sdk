@@ -1,5 +1,5 @@
 /**
- * Mode selector — prompt user to choose CLI or API mode.
+ * Mode selector — prompt user to choose SDK or API mode.
  * Writes selection to .claudiv/config.json.
  */
 
@@ -14,7 +14,7 @@ export async function selectMode(projectRoot: string): Promise<void> {
     name: 'mode',
     message: 'How should Claudiv invoke Claude?',
     choices: [
-      { title: 'CLI (claude --print)', description: 'Requires claude CLI installed', value: 'cli' },
+      { title: 'SDK (Agent SDK)', description: 'Multi-turn with sub-agents', value: 'sdk' },
       { title: 'API (Anthropic SDK)', description: 'Requires ANTHROPIC_API_KEY', value: 'api' },
     ],
     initial: 0,
